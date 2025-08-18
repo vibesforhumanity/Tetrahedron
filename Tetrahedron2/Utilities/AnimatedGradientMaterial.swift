@@ -10,7 +10,7 @@ class AnimatedGradientMaterial {
         // Very simple, visible material
         let tealColor = UIColor.cyan
         material.diffuse.contents = tealColor
-        material.emission.contents = tealColor
+        material.emission.contents = UIColor.white //tealColor
         material.emission.intensity = 1.0
         
         // Use basic material properties
@@ -21,7 +21,7 @@ class AnimatedGradientMaterial {
     }
     
     static func createMovingGradientTexture() -> UIImage {
-        let size = CGSize(width: 400, height: 100)
+        let size = CGSize(width: 200, height: 50)
         let renderer = UIGraphicsImageRenderer(size: size)
         
         return renderer.image { context in
@@ -33,6 +33,7 @@ class AnimatedGradientMaterial {
                 UIColor(red: 0, green: 0.3, blue: 0.4, alpha: 1).cgColor,  // dark teal
                 UIColor(red: 0, green: 0.8, blue: 1, alpha: 1).cgColor,    // bright cyan
                 UIColor(red: 0.5, green: 1, blue: 1, alpha: 1).cgColor,    // bright white-cyan
+                UIColor(red: 0.8, green: 0, blue: 1, alpha: 1).cgColor,    // purple
                 UIColor(red: 0, green: 0.8, blue: 1, alpha: 1).cgColor,    // bright cyan
                 UIColor(red: 0, green: 0.3, blue: 0.4, alpha: 1).cgColor   // dark teal
             ]
@@ -81,7 +82,7 @@ class AnimatedGradientMaterial {
         material.lightingModel = .constant
         material.isDoubleSided = true
         
-        // Create vertex shader for smooth traveling bulge
+        // Create combined vertex and surface shaders for traveling bulge with color
         let vertexShader = """
         uniform float u_time;
         uniform float u_bulgePosition;
@@ -106,51 +107,62 @@ class AnimatedGradientMaterial {
         _geometry.position.z *= radiusMultiplier;
         """
         
-        material.shaderModifiers = [.geometry: vertexShader]
+        let surfaceShader = """
+        uniform float u_bulgePosition;
+        uniform float u_bulgeWidth;
+        
+        #pragma body
+        
+        // Get the texture coordinate Y and flip it to match geometry coordinate system
+        float normalizedY = 1.0 - _surface.diffuseTexcoord.y;
+        
+        // Calculate distance from current bulge position - same as vertex shader
+        float distanceFromBulge = abs(normalizedY - u_bulgePosition);
+        
+        // Create brightness effect that matches the bulge exactly
+        float brightness = smoothstep(u_bulgeWidth, 0.0, distanceFromBulge);
+        
+        // Base colors
+        vec3 darkTeal = vec3(0.0, 0.6, 0.8);
+        vec3 brightCyan = vec3(0.0, 1.0, 1.0);
+        vec3 whiteCyan = vec3(0.8, 1.0, 1.0);
+        
+        // Mix colors based on brightness - bulge areas are bright white/cyan
+        vec3 finalColor = mix(darkTeal, brightCyan, brightness);
+        finalColor = mix(finalColor, whiteCyan, brightness * brightness); // Extra white at peak
+        
+        // Set emission intensity that matches bulge presence
+        float intensity = 1.0 + brightness * 3.0;
+        
+        _surface.diffuse = vec4(finalColor, 1.0);
+        _surface.emission = vec4(finalColor * intensity, 1.0);
+        """
+        
+        material.shaderModifiers = [.geometry: vertexShader, .surface: surfaceShader]
         
         // Set initial uniform values
         material.setValue(0.0, forKey: "u_time")
         material.setValue(0.0, forKey: "u_bulgePosition") 
-        material.setValue(0.12, forKey: "u_bulgeWidth")    // Width of the bulge
-        material.setValue(1.5, forKey: "u_bulgeIntensity") // How much it bulges
+        material.setValue(0.1, forKey: "u_bulgeWidth")    // Width of the bulge
+        material.setValue(1.0, forKey: "u_bulgeIntensity") // How much it bulges
         
-        // Create traveling bulge animation
-        createSmoothTravelingBulge(for: material, duration: duration + Double(edgeIndex % 4) * 0.3)
+        // Create traveling bulge animation with realistic light reflection timing
+        let randomDelay = Double.random(in: 0.0...0.8)
+        let randomSpeed = Double.random(in: 0.8...1.4) 
+        createSmoothTravelingBulge(for: material, duration: duration * randomSpeed, delay: randomDelay)
     }
     
-    static func createSmoothTravelingBulge(for material: SCNMaterial, duration: Double) {
-        // Simple single bulge that travels along the edge
+    static func createSmoothTravelingBulge(for material: SCNMaterial, duration: Double, delay: Double = 0.0) {
+        // Single animation that controls both geometry and color
+        // The surface shader will automatically make the bulge bright white/cyan
         let positionAnimation = CABasicAnimation(keyPath: "u_bulgePosition")
         positionAnimation.fromValue = 0.0
         positionAnimation.toValue = 1.0
         positionAnimation.duration = duration
         positionAnimation.repeatCount = .infinity
-        positionAnimation.timingFunction = CAMediaTimingFunction(name: .linear)
+        positionAnimation.beginTime = CACurrentMediaTime() + delay
+        positionAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut) // More realistic reflection timing
         
         material.addAnimation(positionAnimation, forKey: "bulgePosition")
-        
-        // Create 2 traveling bulges by having 2 bright spots per cycle
-        let brightAnimation = CAKeyframeAnimation(keyPath: "emission.intensity")
-        brightAnimation.values = [0.8, 2.0, 4.0, 2.0, 0.8, 2.0, 4.0, 2.0, 0.8]
-        brightAnimation.keyTimes = [0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0]
-        brightAnimation.duration = duration
-        brightAnimation.repeatCount = .infinity
-        brightAnimation.timingFunction = CAMediaTimingFunction(name: .linear)
-        
-        material.addAnimation(brightAnimation, forKey: "brightness")
-        
-        // Color animation with 2 bright cycles to match the bulges
-        let colorAnimation = CAKeyframeAnimation(keyPath: "emission.contents")
-        let darkTeal = UIColor(red: 0, green: 0.6, blue: 0.8, alpha: 1)
-        let brightCyan = UIColor.cyan
-        let whiteCyan = UIColor(red: 0.7, green: 1, blue: 1, alpha: 1)
-        
-        colorAnimation.values = [darkTeal, brightCyan, whiteCyan, brightCyan, darkTeal, brightCyan, whiteCyan, brightCyan, darkTeal]
-        colorAnimation.keyTimes = [0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0]
-        colorAnimation.duration = duration
-        colorAnimation.repeatCount = .infinity
-        colorAnimation.timingFunction = CAMediaTimingFunction(name: .linear)
-        
-        material.addAnimation(colorAnimation, forKey: "color")
     }
 }

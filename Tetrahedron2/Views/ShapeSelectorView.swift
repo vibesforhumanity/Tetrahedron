@@ -17,7 +17,9 @@ struct ShapeSelectorView: View {
                             .font(.caption2)
                             .foregroundColor(selectedShape == shape ? .cyan : .white.opacity(0.4))
                     }
-                    .frame(width: 70)
+                    .frame(width: 80, height: 80)
+                    .padding(.all, 8)
+                    .contentShape(Rectangle())
                     .onTapGesture {
                         withAnimation(.easeInOut(duration: 0.3)) {
                             selectedShape = shape
