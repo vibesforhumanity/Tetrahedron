@@ -103,7 +103,7 @@
 /* Begin PBXNativeTarget section */
 		81429E212E517B4F0010EE82 /* Tetrahedron */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 81429E432E517B500010EE82 /* Build configuration list for PBXNativeTarget "Tetrahedron2" */;
+			buildConfigurationList = 81429E432E517B500010EE82 /* Build configuration list for PBXNativeTarget "Tetrahedron" */;
 			buildPhases = (
 				81429E1E2E517B4F0010EE82 /* Sources */,
 				81429E1F2E517B4F0010EE82 /* Frameworks */,
@@ -116,16 +116,16 @@
 			fileSystemSynchronizedGroups = (
 				81429E242E517B4F0010EE82 /* Tetrahedron */,
 			);
-			name = Tetrahedron2;
+			name = Tetrahedron;
 			packageProductDependencies = (
 			);
-			productName = Tetrahedron2;
+			productName = Tetrahedron;
 			productReference = 81429E222E517B4F0010EE82 /* Tetrahedron.app */;
 			productType = "com.apple.product-type.application";
 		};
 		81429E2E2E517B500010EE82 /* TetrahedronTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 81429E462E517B500010EE82 /* Build configuration list for PBXNativeTarget "Tetrahedron2Tests" */;
+			buildConfigurationList = 81429E462E517B500010EE82 /* Build configuration list for PBXNativeTarget "TetrahedronTests" */;
 			buildPhases = (
 				81429E2B2E517B500010EE82 /* Sources */,
 				81429E2C2E517B500010EE82 /* Frameworks */,
@@ -139,16 +139,16 @@
 			fileSystemSynchronizedGroups = (
 				81429E322E517B500010EE82 /* TetrahedronTests */,
 			);
-			name = Tetrahedron2Tests;
+			name = TetrahedronTests;
 			packageProductDependencies = (
 			);
-			productName = Tetrahedron2Tests;
+			productName = TetrahedronTests;
 			productReference = 81429E2F2E517B500010EE82 /* TetrahedronTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		81429E382E517B500010EE82 /* TetrahedronUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 81429E492E517B500010EE82 /* Build configuration list for PBXNativeTarget "Tetrahedron2UITests" */;
+			buildConfigurationList = 81429E492E517B500010EE82 /* Build configuration list for PBXNativeTarget "TetrahedronUITests" */;
 			buildPhases = (
 				81429E352E517B500010EE82 /* Sources */,
 				81429E362E517B500010EE82 /* Frameworks */,
@@ -162,10 +162,10 @@
 			fileSystemSynchronizedGroups = (
 				81429E3C2E517B500010EE82 /* TetrahedronUITests */,
 			);
-			name = Tetrahedron2UITests;
+			name = TetrahedronUITests;
 			packageProductDependencies = (
 			);
-			productName = Tetrahedron2UITests;
+			productName = TetrahedronUITests;
 			productReference = 81429E392E517B500010EE82 /* TetrahedronUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
@@ -192,7 +192,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 81429E1D2E517B4F0010EE82 /* Build configuration list for PBXProject "Tetrahedron2" */;
+			buildConfigurationList = 81429E1D2E517B4F0010EE82 /* Build configuration list for PBXProject "Tetrahedron" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -406,7 +406,10 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SJ7BEX7W6X;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = Tetrahedron/Info.plist;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Tetrahedron;
+				INFOPLIST_KEY_NSAudioUsageDescription = "This app plays ambient background music to enhance your meditation and relaxation experience with geometric shapes.";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -434,7 +437,10 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SJ7BEX7W6X;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = Tetrahedron/Info.plist;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Tetrahedron;
+				INFOPLIST_KEY_NSAudioUsageDescription = "This app plays ambient background music to enhance your meditation and relaxation experience with geometric shapes.";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -460,15 +466,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SJ7BEX7W6X;
-				INFOPLIST_FILE = Tetrahedron/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = dazzle.Tetrahedron2Tests;
+				PRODUCT_BUNDLE_IDENTIFIER = dazzle.TetrahedronTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Tetrahedron2.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Tetrahedron2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Tetrahedron.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Tetrahedron";
 			};
 			name = Debug;
 		};
@@ -479,15 +484,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SJ7BEX7W6X;
-				INFOPLIST_FILE = Tetrahedron/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = dazzle.Tetrahedron2Tests;
+				PRODUCT_BUNDLE_IDENTIFIER = dazzle.TetrahedronTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Tetrahedron2.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Tetrahedron2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Tetrahedron.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Tetrahedron";
 			};
 			name = Release;
 		};
@@ -497,14 +501,13 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SJ7BEX7W6X;
-				INFOPLIST_FILE = Tetrahedron/Info.plist;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = dazzle.Tetrahedron2UITests;
+				PRODUCT_BUNDLE_IDENTIFIER = dazzle.TetrahedronUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Tetrahedron2;
+				TEST_TARGET_NAME = Tetrahedron;
 			};
 			name = Debug;
 		};
@@ -514,21 +517,20 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SJ7BEX7W6X;
-				INFOPLIST_FILE = Tetrahedron/Info.plist;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = dazzle.Tetrahedron2UITests;
+				PRODUCT_BUNDLE_IDENTIFIER = dazzle.TetrahedronUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Tetrahedron2;
+				TEST_TARGET_NAME = Tetrahedron;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		81429E1D2E517B4F0010EE82 /* Build configuration list for PBXProject "Tetrahedron2" */ = {
+		81429E1D2E517B4F0010EE82 /* Build configuration list for PBXProject "Tetrahedron" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				81429E412E517B500010EE82 /* Debug */,
@@ -537,7 +539,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		81429E432E517B500010EE82 /* Build configuration list for PBXNativeTarget "Tetrahedron2" */ = {
+		81429E432E517B500010EE82 /* Build configuration list for PBXNativeTarget "Tetrahedron" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				81429E442E517B500010EE82 /* Debug */,
@@ -546,7 +548,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		81429E462E517B500010EE82 /* Build configuration list for PBXNativeTarget "Tetrahedron2Tests" */ = {
+		81429E462E517B500010EE82 /* Build configuration list for PBXNativeTarget "TetrahedronTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				81429E472E517B500010EE82 /* Debug */,
@@ -555,7 +557,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		81429E492E517B500010EE82 /* Build configuration list for PBXNativeTarget "Tetrahedron2UITests" */ = {
+		81429E492E517B500010EE82 /* Build configuration list for PBXNativeTarget "TetrahedronUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				81429E4A2E517B500010EE82 /* Debug */,
