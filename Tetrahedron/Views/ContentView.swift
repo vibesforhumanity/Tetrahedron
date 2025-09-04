@@ -30,8 +30,6 @@ struct ContentView: View {
             ConfigurationBottomSheet(config: config, audioManager: audioManager)
                 .presentationDetents([.fraction(0.6), .large])
                 .presentationDragIndicator(.hidden)
-                .presentationBackground(.regularMaterial)
-                .presentationBackgroundInteraction(.enabled)
         }
     }
 }
