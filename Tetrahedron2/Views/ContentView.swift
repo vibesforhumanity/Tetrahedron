@@ -1,51 +1,37 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var selectedShape: ShapeType = .tetrahedron
-    @State private var showShapeSelector = false
+    @StateObject private var config = AppConfiguration()
+    @StateObject private var audioManager = AudioManager()
     
     var body: some View {
         ZStack {
-            ShapeSceneView(selectedShape: $selectedShape)
+            ShapeSceneView(selectedShape: $config.selectedShape, selectedColor: config.selectedColor, config: config)
                 .ignoresSafeArea()
-            
-            VStack {
-                Spacer()
-                
-                if showShapeSelector {
-                    ShapeSelectorView(selectedShape: $selectedShape, showSelector: $showShapeSelector)
-                        .transition(.move(edge: .bottom).combined(with: .opacity))
-                }
-                
-                VStack(spacing: 4) {
-                    Capsule()
-                        .fill(Color.white.opacity(0.3))
-                        .frame(width: 40, height: 4)
-                    
-                    Text("Shapes")
-                        .font(.caption)
-                        .foregroundColor(.white.opacity(0.5))
-                }
-                .padding(.bottom, showShapeSelector ? 0 : 20)
                 .onTapGesture {
-                    withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                        showShapeSelector.toggle()
+                    if config.showConfigSheet {
+                        // If sheet is open, close it
+                        withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                            config.showConfigSheet = false
+                        }
+                    } else {
+                        // If sheet is closed, open it
+                        let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+                        impactFeedback.impactOccurred()
+                        
+                        withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                            config.showConfigSheet = true
+                        }
                     }
                 }
-                .gesture(
-                    DragGesture()
-                        .onEnded { value in
-                            withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                                if value.translation.height < -50 {
-                                    showShapeSelector = true
-                                } else if value.translation.height > 50 {
-                                    showShapeSelector = false
-                                }
-                            }
-                        }
-                )
-            }
         }
         .statusBar(hidden: true)
+        .sheet(isPresented: $config.showConfigSheet) {
+            ConfigurationBottomSheet(config: config, audioManager: audioManager)
+                .presentationDetents([.fraction(0.6), .large])
+                .presentationDragIndicator(.hidden)
+                .presentationBackground(.regularMaterial)
+                .presentationBackgroundInteraction(.enabled)
+        }
     }
 }

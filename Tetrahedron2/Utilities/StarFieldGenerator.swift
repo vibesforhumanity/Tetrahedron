@@ -13,8 +13,9 @@ struct StarFieldGenerator {
             particleSystem.particleSize = CGFloat(0.02 - Float(i) * 0.005)
             particleSystem.particleSizeVariation = 0.01
             
-            particleSystem.particleColor = UIColor.white
-            particleSystem.particleColorVariation = SCNVector4(0, 0, 0, 0.3)
+            particleSystem.particleColor = UIColor.white.withAlphaComponent(0.8)
+            particleSystem.particleColorVariation = SCNVector4(0, 0, 0, 0.2)
+            particleSystem.blendMode = .alpha // Use alpha blending instead of default
             
             particleSystem.emitterShape = SCNSphere(radius: 10)
             particleSystem.birthLocation = .surface

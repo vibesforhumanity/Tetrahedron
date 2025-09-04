@@ -48,26 +48,25 @@ struct GeometryUtils {
     
     static func createGradientImage() -> UIImage {
         let size = CGSize(width: 100, height: 100)
-        UIGraphicsBeginImageContext(size)
-        guard let context = UIGraphicsGetCurrentContext() else { return UIImage() }
+        let renderer = UIGraphicsImageRenderer(size: size)
         
-        let colorSpace = CGColorSpaceCreateDeviceRGB()
-        let colors = [UIColor.black.cgColor, UIColor(red: 0, green: 0, blue: 0.1, alpha: 1).cgColor]
-        let locations: [CGFloat] = [0, 1]
-        
-        guard let gradient = CGGradient(colorsSpace: colorSpace, colors: colors as CFArray, locations: locations) else {
-            return UIImage()
+        return renderer.image { context in
+            let cgContext = context.cgContext
+            
+            let colorSpace = CGColorSpaceCreateDeviceRGB()
+            let colors = [UIColor.black.cgColor, UIColor(red: 0, green: 0, blue: 0.1, alpha: 1).cgColor]
+            let locations: [CGFloat] = [0, 1]
+            
+            guard let gradient = CGGradient(colorsSpace: colorSpace, colors: colors as CFArray, locations: locations) else {
+                return
+            }
+            
+            cgContext.drawRadialGradient(gradient,
+                                       startCenter: CGPoint(x: 50, y: 50),
+                                       startRadius: 0,
+                                       endCenter: CGPoint(x: 50, y: 50),
+                                       endRadius: 70,
+                                       options: [])
         }
-        
-        context.drawRadialGradient(gradient,
-                                  startCenter: CGPoint(x: 50, y: 50),
-                                  startRadius: 0,
-                                  endCenter: CGPoint(x: 50, y: 50),
-                                  endRadius: 70,
-                                  options: [])
-        
-        let image = UIGraphicsGetImageFromCurrentImageContext() ?? UIImage()
-        UIGraphicsEndImageContext()
-        return image
     }
 }

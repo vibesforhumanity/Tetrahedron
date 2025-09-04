@@ -59,14 +59,32 @@ struct ShapeGenerator {
         }
     }
     
-    static func createEdgeMaterial(for index: Int) -> SCNMaterial {
-        return AnimatedGradientMaterial.createAnimatedGradientMaterial(for: index)
+    static func createEdgeMaterial(for index: Int, color: NeonColor) -> SCNMaterial {
+        let material = SCNMaterial()
+        let selectedColor = color.uiColor
+        
+        material.diffuse.contents = selectedColor
+        material.emission.contents = selectedColor
+        material.emission.intensity = 1.0
+        material.lightingModel = .constant
+        material.isDoubleSided = true
+        
+        return material
     }
     
-    static func createVertexMaterial() -> SCNMaterial {
+    static func createVertexMaterial(color: NeonColor) -> SCNMaterial {
         let material = SCNMaterial()
-        material.diffuse.contents = UIColor.white
-        material.emission.contents = UIColor.white.withAlphaComponent(0.8)
+        
+        // SIMPLIFIED FOR DEBUGGING: Use AppConfiguration color directly
+        let selectedColor = color.uiColor
+        
+        // DEBUG: Log the actual color being used
+        if let components = selectedColor.cgColor.components {
+            print("🔵 VERTEX Material Color \(color): R=\(components[0]), G=\(components[1]), B=\(components[2])")
+        }
+        
+        material.diffuse.contents = selectedColor
+        material.emission.contents = selectedColor.withAlphaComponent(0.8)
         material.emission.intensity = 1.2
         return material
     }

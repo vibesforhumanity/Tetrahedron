@@ -1,28 +1,51 @@
 import UIKit
 import SceneKit
+import CoreHaptics
 
 class SceneCoordinator: NSObject {
     weak var scnView: SCNView?
     weak var shapeContainer: SCNNode?
+    weak var config: AppConfiguration?
     
     private var lastPanLocation: CGPoint = .zero
     private var currentVelocity: CGVector = .zero
     private var baseRotationSpeed: CGVector = CGVector(dx: 30, dy: 20)
     private var addedVelocity: CGVector = .zero
     private var displayLink: CADisplayLink?
+    private let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+    private let selectionFeedback = UISelectionFeedbackGenerator()
+    private var hapticEngine: CHHapticEngine?
+    private var hapticTimer: Timer?
+    private var lastSpeed: CGFloat = 0
     
     override init() {
         super.init()
         setupDisplayLink()
+        setupHaptics()
+        impactFeedback.prepare()
+        selectionFeedback.prepare()
     }
     
     deinit {
         displayLink?.invalidate()
+        hapticTimer?.invalidate()
+        hapticEngine?.stop()
     }
     
     private func setupDisplayLink() {
         displayLink = CADisplayLink(target: self, selector: #selector(updateRotation))
         displayLink?.add(to: .main, forMode: .common)
+    }
+    
+    private func setupHaptics() {
+        guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
+        
+        do {
+            hapticEngine = try CHHapticEngine()
+            try hapticEngine?.start()
+        } catch {
+            print("Failed to create haptic engine: \(error)")
+        }
     }
     
     @objc private func updateRotation() {
@@ -40,6 +63,9 @@ class SceneCoordinator: NSObject {
         
         shapeContainer.transform = SCNMatrix4Mult(SCNMatrix4Mult(currentTransform, rotationMatrix), rotationMatrix2)
         
+        let speed = sqrt(pow(totalVelocityX, 2) + pow(totalVelocityY, 2))
+        updateHapticFeedback(for: speed)
+        
         addedVelocity.dx *= 0.985
         addedVelocity.dy *= 0.985
         
@@ -47,7 +73,6 @@ class SceneCoordinator: NSObject {
             addedVelocity = .zero
         }
         
-        let speed = sqrt(pow(totalVelocityX, 2) + pow(totalVelocityY, 2))
         updateStarFieldVelocity(speed: speed)
     }
     
@@ -61,6 +86,9 @@ class SceneCoordinator: NSObject {
         case .began:
             lastPanLocation = location
             currentVelocity = .zero
+            if config?.isHapticsEnabled == true {
+                selectionFeedback.selectionChanged()
+            }
             
         case .changed:
             let deltaX = location.x - lastPanLocation.x
@@ -88,6 +116,86 @@ class SceneCoordinator: NSObject {
             
         default:
             break
+        }
+    }
+    
+    private func updateHapticFeedback(for speed: CGFloat) {
+        // Check if haptics are enabled
+        guard config?.isHapticsEnabled == true else {
+            hapticTimer?.invalidate()
+            hapticTimer = nil
+            lastSpeed = 0
+            return
+        }
+        
+        // Only trigger haptics when there's meaningful rotation (not just base rotation)
+        let addedSpeed = sqrt(pow(addedVelocity.dx, 2) + pow(addedVelocity.dy, 2))
+        
+        if addedSpeed < 50 { // No haptics for gentle base rotation
+            hapticTimer?.invalidate()
+            hapticTimer = nil
+            lastSpeed = 0
+            return
+        }
+        
+        // Calculate haptic frequency based on actual spin velocity (like Fidgetable)
+        let maxFrequency: TimeInterval = 0.05  // 20 haptics per second at max speed
+        let minFrequency: TimeInterval = 0.2   // 5 haptics per second at min speed
+        let speedNormalized = min(1.0, max(0.0, addedSpeed / 3000))
+        let hapticInterval = minFrequency - (speedNormalized * (minFrequency - maxFrequency))
+        
+        // Update timer when speed changes or no timer exists
+        if hapticTimer == nil || abs(addedSpeed - lastSpeed) > 100 {
+            hapticTimer?.invalidate()
+            
+            if addedSpeed > 50 { // Only start timer if there's meaningful spin
+                hapticTimer = Timer.scheduledTimer(withTimeInterval: hapticInterval, repeats: true) { [weak self] _ in
+                    // Check current speed each time to scale intensity
+                    let currentAddedSpeed = sqrt(pow(self?.addedVelocity.dx ?? 0, 2) + pow(self?.addedVelocity.dy ?? 0, 2))
+                    let currentIntensity = min(1.0, max(0.0, currentAddedSpeed / 3000))
+                    self?.triggerSpinHaptic(intensity: currentIntensity)
+                }
+            }
+            
+            lastSpeed = addedSpeed
+        }
+    }
+    
+    private func triggerSpinHaptic(intensity: CGFloat) {
+        // Use Core Haptics for more pronounced feedback like Fidgetable
+        guard let hapticEngine = hapticEngine else {
+            // Fallback to UIKit haptics
+            if intensity > 0.7 {
+                UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+            } else if intensity > 0.4 {
+                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+            } else {
+                impactFeedback.impactOccurred()
+            }
+            return
+        }
+        
+        do {
+            // Create a sharp, pronounced haptic like Fidgetable's spinning toys
+            let sharpness = Float(0.8 + intensity * 0.2) // 0.8 to 1.0
+            let intensityValue = Float(0.6 + intensity * 0.4) // 0.6 to 1.0
+            
+            let hapticEvent = CHHapticEvent(
+                eventType: .hapticTransient,
+                parameters: [
+                    CHHapticEventParameter(parameterID: .hapticSharpness, value: sharpness),
+                    CHHapticEventParameter(parameterID: .hapticIntensity, value: intensityValue)
+                ],
+                relativeTime: 0
+            )
+            
+            let pattern = try CHHapticPattern(events: [hapticEvent], parameters: [])
+            let player = try hapticEngine.makePlayer(with: pattern)
+            try player.start(atTime: 0)
+            
+        } catch {
+            // Fallback to UIKit haptics
+            impactFeedback.impactOccurred()
         }
     }
     
