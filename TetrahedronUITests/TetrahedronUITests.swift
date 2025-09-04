@@ -1,13 +1,13 @@
 //
-//  Tetrahedron2UITests.swift
-//  Tetrahedron2UITests
+//  TetrahedronUITests.swift
+//  TetrahedronUITests
 //
 //  Created by Emily Zakas on 8/16/25.
 //
 
 import XCTest
 
-final class Tetrahedron2UITests: XCTestCase {
+final class TetrahedronUITests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.

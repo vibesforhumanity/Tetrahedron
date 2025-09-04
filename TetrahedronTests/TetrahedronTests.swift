@@ -7,9 +7,9 @@
 
 import Testing
 import SceneKit
-@testable import Tetrahedron2
+@testable import Tetrahedron
 
-struct Tetrahedron2Tests {
+struct TetrahedronTests {
 
     @Test func testAppConfigurationInitialization() async throws {
         let config = AppConfiguration()

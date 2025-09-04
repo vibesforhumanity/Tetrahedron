@@ -148,45 +148,6 @@ struct ConfigurationBottomSheet: View {
                         .padding(.horizontal, 28)
                     }
                     
-                    // Haptics Section
-                    VStack(spacing: 20) {
-                        HStack {
-                            ZStack {
-                                Circle()
-                                    .fill(config.selectedColor.color.opacity(0.15))
-                                    .frame(width: 32, height: 32)
-                                Image(systemName: config.isHapticsEnabled ? "hand.tap" : "hand.tap.slash")
-                                    .foregroundStyle(config.selectedColor.color)
-                                    .font(.system(size: 16, weight: .semibold))
-                            }
-                            Text("HAPTICS")
-                                .font(.system(size: 13, weight: .bold, design: .monospaced))
-                                .foregroundStyle(.white.opacity(0.9))
-                                .tracking(1.2)
-                            Spacer()
-                        }
-                        .padding(.horizontal, 28)
-                        
-                        HStack {
-                            VStack(alignment: .leading, spacing: 6) {
-                                Text("TACTILE_FEEDBACK")
-                                    .font(.system(size: 15, weight: .medium, design: .monospaced))
-                                    .foregroundStyle(.white.opacity(0.95))
-                                Text("// spin.vibration")
-                                    .font(.system(size: 12, weight: .regular, design: .monospaced))
-                                    .foregroundStyle(.white.opacity(0.5))
-                            }
-                            
-                            Spacer()
-                            
-                            FuturisticToggle(
-                                isOn: $config.isHapticsEnabled,
-                                accentColor: config.selectedColor.color
-                            )
-                        }
-                        .padding(.horizontal, 28)
-                    }
-                    
                     // Share Section  
                     shareSection
                 }

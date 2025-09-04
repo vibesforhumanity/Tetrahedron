@@ -1,13 +1,13 @@
 //
-//  Tetrahedron2UITestsLaunchTests.swift
-//  Tetrahedron2UITests
+//  TetrahedronUITestsLaunchTests.swift
+//  TetrahedronUITests
 //
 //  Created by Emily Zakas on 8/16/25.
 //
 
 import XCTest
 
-final class Tetrahedron2UITestsLaunchTests: XCTestCase {
+final class TetrahedronUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true

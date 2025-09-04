@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct ShapesSpinApp: App {
+struct TetrahedronApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()

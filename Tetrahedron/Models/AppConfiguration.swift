@@ -6,7 +6,6 @@ class AppConfiguration: ObservableObject {
     @Published var selectedColor: NeonColor = .cyan
     @Published var isMusicEnabled: Bool = false
     @Published var showConfigSheet: Bool = false
-    @Published var isHapticsEnabled: Bool = true
 }
 
 enum NeonColor: String, CaseIterable, Identifiable {
