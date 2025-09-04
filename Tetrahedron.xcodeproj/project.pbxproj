@@ -16,38 +16,38 @@
 			containerPortal = 81429E1A2E517B4F0010EE82 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 81429E212E517B4F0010EE82;
-			remoteInfo = Tetrahedron2;
+			remoteInfo = Tetrahedron;
 		};
 		81429E3A2E517B500010EE82 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 81429E1A2E517B4F0010EE82 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 81429E212E517B4F0010EE82;
-			remoteInfo = Tetrahedron2;
+			remoteInfo = Tetrahedron;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		060149F02E5C07780075E3A1 /* ES_Dunes - Valante.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "ES_Dunes - Valante.mp3"; sourceTree = "<group>"; };
-		81429E222E517B4F0010EE82 /* Tetrahedron2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tetrahedron2.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		81429E2F2E517B500010EE82 /* Tetrahedron2Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tetrahedron2Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		81429E392E517B500010EE82 /* Tetrahedron2UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tetrahedron2UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		81429E222E517B4F0010EE82 /* Tetrahedron.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tetrahedron.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		81429E2F2E517B500010EE82 /* TetrahedronTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TetrahedronTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		81429E392E517B500010EE82 /* TetrahedronUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TetrahedronUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		81429E242E517B4F0010EE82 /* Tetrahedron2 */ = {
+		81429E242E517B4F0010EE82 /* Tetrahedron */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Tetrahedron2;
+			path = Tetrahedron;
 			sourceTree = "<group>";
 		};
-		81429E322E517B500010EE82 /* Tetrahedron2Tests */ = {
+		81429E322E517B500010EE82 /* TetrahedronTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Tetrahedron2Tests;
+			path = TetrahedronTests;
 			sourceTree = "<group>";
 		};
-		81429E3C2E517B500010EE82 /* Tetrahedron2UITests */ = {
+		81429E3C2E517B500010EE82 /* TetrahedronUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Tetrahedron2UITests;
+			path = TetrahedronUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -81,9 +81,9 @@
 			isa = PBXGroup;
 			children = (
 				060149F02E5C07780075E3A1 /* ES_Dunes - Valante.mp3 */,
-				81429E242E517B4F0010EE82 /* Tetrahedron2 */,
-				81429E322E517B500010EE82 /* Tetrahedron2Tests */,
-				81429E3C2E517B500010EE82 /* Tetrahedron2UITests */,
+				81429E242E517B4F0010EE82 /* Tetrahedron */,
+				81429E322E517B500010EE82 /* TetrahedronTests */,
+				81429E3C2E517B500010EE82 /* TetrahedronUITests */,
 				81429E232E517B4F0010EE82 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -91,9 +91,9 @@
 		81429E232E517B4F0010EE82 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				81429E222E517B4F0010EE82 /* Tetrahedron2.app */,
-				81429E2F2E517B500010EE82 /* Tetrahedron2Tests.xctest */,
-				81429E392E517B500010EE82 /* Tetrahedron2UITests.xctest */,
+				81429E222E517B4F0010EE82 /* Tetrahedron.app */,
+				81429E2F2E517B500010EE82 /* TetrahedronTests.xctest */,
+				81429E392E517B500010EE82 /* TetrahedronUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -101,7 +101,7 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		81429E212E517B4F0010EE82 /* Tetrahedron2 */ = {
+		81429E212E517B4F0010EE82 /* Tetrahedron */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 81429E432E517B500010EE82 /* Build configuration list for PBXNativeTarget "Tetrahedron2" */;
 			buildPhases = (
@@ -114,16 +114,16 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				81429E242E517B4F0010EE82 /* Tetrahedron2 */,
+				81429E242E517B4F0010EE82 /* Tetrahedron */,
 			);
 			name = Tetrahedron2;
 			packageProductDependencies = (
 			);
 			productName = Tetrahedron2;
-			productReference = 81429E222E517B4F0010EE82 /* Tetrahedron2.app */;
+			productReference = 81429E222E517B4F0010EE82 /* Tetrahedron.app */;
 			productType = "com.apple.product-type.application";
 		};
-		81429E2E2E517B500010EE82 /* Tetrahedron2Tests */ = {
+		81429E2E2E517B500010EE82 /* TetrahedronTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 81429E462E517B500010EE82 /* Build configuration list for PBXNativeTarget "Tetrahedron2Tests" */;
 			buildPhases = (
@@ -137,16 +137,16 @@
 				81429E312E517B500010EE82 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				81429E322E517B500010EE82 /* Tetrahedron2Tests */,
+				81429E322E517B500010EE82 /* TetrahedronTests */,
 			);
 			name = Tetrahedron2Tests;
 			packageProductDependencies = (
 			);
 			productName = Tetrahedron2Tests;
-			productReference = 81429E2F2E517B500010EE82 /* Tetrahedron2Tests.xctest */;
+			productReference = 81429E2F2E517B500010EE82 /* TetrahedronTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		81429E382E517B500010EE82 /* Tetrahedron2UITests */ = {
+		81429E382E517B500010EE82 /* TetrahedronUITests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 81429E492E517B500010EE82 /* Build configuration list for PBXNativeTarget "Tetrahedron2UITests" */;
 			buildPhases = (
@@ -160,13 +160,13 @@
 				81429E3B2E517B500010EE82 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				81429E3C2E517B500010EE82 /* Tetrahedron2UITests */,
+				81429E3C2E517B500010EE82 /* TetrahedronUITests */,
 			);
 			name = Tetrahedron2UITests;
 			packageProductDependencies = (
 			);
 			productName = Tetrahedron2UITests;
-			productReference = 81429E392E517B500010EE82 /* Tetrahedron2UITests.xctest */;
+			productReference = 81429E392E517B500010EE82 /* TetrahedronUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -206,9 +206,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				81429E212E517B4F0010EE82 /* Tetrahedron2 */,
-				81429E2E2E517B500010EE82 /* Tetrahedron2Tests */,
-				81429E382E517B500010EE82 /* Tetrahedron2UITests */,
+				81429E212E517B4F0010EE82 /* Tetrahedron */,
+				81429E2E2E517B500010EE82 /* TetrahedronTests */,
+				81429E382E517B500010EE82 /* TetrahedronUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -265,12 +265,12 @@
 /* Begin PBXTargetDependency section */
 		81429E312E517B500010EE82 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 81429E212E517B4F0010EE82 /* Tetrahedron2 */;
+			target = 81429E212E517B4F0010EE82 /* Tetrahedron */;
 			targetProxy = 81429E302E517B500010EE82 /* PBXContainerItemProxy */;
 		};
 		81429E3B2E517B500010EE82 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 81429E212E517B4F0010EE82 /* Tetrahedron2 */;
+			target = 81429E212E517B4F0010EE82 /* Tetrahedron */;
 			targetProxy = 81429E3A2E517B500010EE82 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -329,7 +329,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -387,7 +387,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -406,7 +406,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SJ7BEX7W6X;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Tetrahedron/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -417,7 +417,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = dazzle.Tetrahedron2;
+				PRODUCT_BUNDLE_IDENTIFIER = dazzle.Tetrahedron;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -434,7 +434,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SJ7BEX7W6X;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Tetrahedron/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -445,7 +445,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = dazzle.Tetrahedron2;
+				PRODUCT_BUNDLE_IDENTIFIER = dazzle.Tetrahedron;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -460,8 +460,8 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SJ7BEX7W6X;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				INFOPLIST_FILE = Tetrahedron/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = dazzle.Tetrahedron2Tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -479,8 +479,8 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SJ7BEX7W6X;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				INFOPLIST_FILE = Tetrahedron/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = dazzle.Tetrahedron2Tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -497,7 +497,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SJ7BEX7W6X;
-				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Tetrahedron/Info.plist;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = dazzle.Tetrahedron2UITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -514,7 +514,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SJ7BEX7W6X;
-				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Tetrahedron/Info.plist;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = dazzle.Tetrahedron2UITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
