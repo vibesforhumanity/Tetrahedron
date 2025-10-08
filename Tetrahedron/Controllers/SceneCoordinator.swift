@@ -17,11 +17,8 @@ class SceneCoordinator: NSObject {
     private var hapticEngine: CHHapticEngine?
     private var continuousPlayer: CHHapticAdvancedPatternPlayer?
     private var isHapticPlaying = false
-    private var hapticStopTimer: Timer?
     private var isUserTouching = false
-    private var hapticUpdateTimer: Timer?
     private var currentRotationSpeed: CGFloat = 0.0
-    private var lastHapticFrequency: Float = 0.0
     
     init(config: AppConfiguration) {
         self.config = config
@@ -33,8 +30,6 @@ class SceneCoordinator: NSObject {
     deinit {
         displayLink?.invalidate()
         stopContinuousHaptic()
-        hapticStopTimer?.invalidate()
-        hapticUpdateTimer?.invalidate()
     }
     
     private func setupDisplayLink() {
@@ -66,14 +61,6 @@ class SceneCoordinator: NSObject {
         }
     }
 
-    private func scheduleHapticStop() {
-        guard let config = config else { return }
-
-        hapticStopTimer?.invalidate()
-        hapticStopTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(config.hapticDuration / 1000.0), repeats: false) { [weak self] _ in
-            self?.stopContinuousHaptic()
-        }
-    }
 
     private func startContinuousHaptic() {
         guard let config = config else { return }
@@ -129,13 +116,6 @@ class SceneCoordinator: NSObject {
     private func stopContinuousHaptic() {
         guard isHapticPlaying else { return }
 
-        hapticStopTimer?.invalidate()
-        hapticStopTimer = nil
-
-        // Stop the update timer when haptics fully stop
-        hapticUpdateTimer?.invalidate()
-        hapticUpdateTimer = nil
-
         do {
             try continuousPlayer?.stop(atTime: CHHapticTimeImmediate)
         } catch {
@@ -147,12 +127,6 @@ class SceneCoordinator: NSObject {
     }
 
     private func forceStopAllHaptics() {
-        // Cancel any pending timers
-        hapticStopTimer?.invalidate()
-        hapticStopTimer = nil
-        hapticUpdateTimer?.invalidate()
-        hapticUpdateTimer = nil
-
         // Force stop any playing haptics
         if let player = continuousPlayer {
             do {
@@ -191,108 +165,21 @@ class SceneCoordinator: NSObject {
     private func updateHapticForVelocity(_ velocity: CGFloat) {
         guard let config = config else { return }
 
-        // Calculate dynamic frequency based on velocity
-        let maxVelocity: CGFloat = 500.0 // Threshold for maximum frequency
-        let normalizedVelocity = min(1.0, velocity / maxVelocity)
+        // Only start haptics if there's significant velocity AND user is actively spinning
+        let significantVelocity = velocity > 30.0
 
-        // Scale frequency from base (5Hz) to config frequency based on velocity
-        let minFreq: Float = 5.0 // Minimum frequency at low velocity
-        let frequencyRange = config.hapticFrequency - minFreq
-        let targetFrequency = minFreq + (Float(normalizedVelocity) * frequencyRange)
-
-        // Start haptics if not playing and there's significant velocity
-        if !isHapticPlaying && velocity > 20.0 {
-            startHapticWithFrequency(targetFrequency)
-            startHapticUpdateTimer()
-            lastHapticFrequency = targetFrequency
-        }
-        // Update frequency if it changed significantly
-        else if abs(targetFrequency - lastHapticFrequency) > 2.0 && isHapticPlaying {
-            lastHapticFrequency = targetFrequency
-            restartHapticWithFrequency(targetFrequency)
-        }
-
-        // Stop haptic if velocity is very low (regardless of touch state)
-        if velocity < 10.0 && isHapticPlaying {
+        if significantVelocity && !isHapticPlaying {
+            // Start continuous haptics with base frequency - no restarts
+            startContinuousHaptic()
+        } else if !significantVelocity && isHapticPlaying {
+            // Stop haptics when velocity drops too low
             stopContinuousHaptic()
         }
+
+        // No frequency updates or restarts - keep it simple and continuous
     }
 
-    private func startVelocityBasedHaptic() {
-        guard let config = config else { return }
-
-        // Always ensure clean state before starting
-        forceStopAllHaptics()
-
-        // Start with current velocity-based frequency
-        let currentFreq = max(5.0, Float(currentRotationSpeed / 100.0) * config.hapticFrequency)
-        lastHapticFrequency = currentFreq
-
-        startHapticWithFrequency(currentFreq)
-        startHapticUpdateTimer()
-    }
-
-    private func startHapticUpdateTimer() {
-        // Start continuous updates if not already running
-        guard hapticUpdateTimer == nil else { return }
-
-        hapticUpdateTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
-            self?.updateHapticForVelocity(self?.currentRotationSpeed ?? 0)
-        }
-    }
-
-
-    private func restartHapticWithFrequency(_ frequency: Float) {
-        if isHapticPlaying {
-            stopContinuousHaptic()
-        }
-        startHapticWithFrequency(frequency)
-    }
-
-    private func startHapticWithFrequency(_ frequency: Float) {
-        guard let config = config else { return }
-
-        if hapticEngine == nil {
-            setupHapticFeedback()
-        }
-        guard let hapticEngine = hapticEngine else { return }
-
-        do {
-            // Ensure engine is started
-            try hapticEngine.start()
-
-            // Create a pulsed pattern with specified frequency
-            var events: [CHHapticEvent] = []
-            let pulseInterval: Double = 1.0 / Double(frequency) // Convert Hz to interval
-            let totalDuration: Double = max(1.0, Double(config.hapticDuration) / 1000.0) // Use config duration or minimum 1 second
-            let numberOfPulses = max(1, Int(totalDuration / pulseInterval)) // Ensure at least 1 pulse
-
-            for i in 0..<numberOfPulses {
-                let startTime = Double(i) * pulseInterval
-
-                let intensity = CHHapticEventParameter(parameterID: .hapticIntensity, value: config.hapticIntensity)
-                let sharpness = CHHapticEventParameter(parameterID: .hapticSharpness, value: config.hapticSharpness)
-
-                let pulseEvent = CHHapticEvent(
-                    eventType: .hapticTransient,
-                    parameters: [intensity, sharpness],
-                    relativeTime: startTime
-                )
-
-                events.append(pulseEvent)
-            }
-
-            let pattern = try CHHapticPattern(events: events, parameters: [])
-            continuousPlayer = try hapticEngine.makeAdvancedPlayer(with: pattern)
-
-            try continuousPlayer?.start(atTime: CHHapticTimeImmediate)
-            isHapticPlaying = true
-
-        } catch {
-            print("Failed to start haptic with frequency \(frequency): \(error)")
-            resetHapticEngine()
-        }
-    }
+    // Simplified - no complex frequency updates or restarts needed
     
     @objc private func updateRotation() {
         guard let shapeContainer = shapeContainer else { return }
@@ -336,7 +223,7 @@ class SceneCoordinator: NSObject {
             lastPanLocation = location
             currentVelocity = .zero
             isUserTouching = true
-            startVelocityBasedHaptic()
+            // Don't start haptics until user actually moves
             
         case .changed:
             let deltaX = location.x - lastPanLocation.x
