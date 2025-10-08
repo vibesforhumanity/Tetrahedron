@@ -163,8 +163,6 @@ class SceneCoordinator: NSObject {
     // MARK: - Velocity-Based Haptic Methods
 
     private func updateHapticForVelocity(_ velocity: CGFloat) {
-        guard let config = config else { return }
-
         // Only start haptics if there's significant velocity AND user is actively spinning
         let significantVelocity = velocity > 30.0
 
