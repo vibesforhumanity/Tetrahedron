@@ -198,9 +198,12 @@ class SceneCoordinator: NSObject {
         
         let speed = sqrt(pow(totalVelocityX, 2) + pow(totalVelocityY, 2))
 
-        // Update haptic feedback based on rotation velocity
-        currentRotationSpeed = speed
-        updateHapticForVelocity(speed)
+        // For haptics, only use the user-added velocity, not base rotation
+        let userAddedSpeed = sqrt(pow(addedVelocity.dx, 2) + pow(addedVelocity.dy, 2))
+
+        // Update haptic feedback based on USER velocity only
+        currentRotationSpeed = speed  // Keep this for star field effects
+        updateHapticForVelocity(userAddedSpeed)  // Use user speed for haptics
 
         addedVelocity.dx *= 0.985
         addedVelocity.dy *= 0.985
