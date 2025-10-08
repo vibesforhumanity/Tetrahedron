@@ -20,6 +20,8 @@ class SceneCoordinator: NSObject {
     private var isUserTouching = false
     private var hasUserInteracted = false
     private var currentRotationSpeed: CGFloat = 0.0
+    private var hapticTimer: Timer?
+    private var lastHapticUpdate: Date = Date()
     
     init(config: AppConfiguration) {
         self.config = config
@@ -31,6 +33,7 @@ class SceneCoordinator: NSObject {
     deinit {
         displayLink?.invalidate()
         stopContinuousHaptic()
+        hapticTimer?.invalidate()
     }
     
     private func setupDisplayLink() {
@@ -65,9 +68,7 @@ class SceneCoordinator: NSObject {
 
     private func startContinuousHaptic() {
         guard let config = config else { return }
-
-        // Always ensure clean state before starting
-        forceStopAllHaptics()
+        guard !isHapticPlaying else { return }
 
         // Restart engine if needed
         if hapticEngine == nil {
@@ -78,67 +79,62 @@ class SceneCoordinator: NSObject {
         do {
             // Ensure engine is started
             try hapticEngine.start()
-
-            // Create a pulsed pattern based on config frequency
-            var events: [CHHapticEvent] = []
-            let pulseInterval: Double = 1.0 / Double(config.hapticFrequency) // Convert Hz to interval
-            let totalDuration: Double = max(1.0, Double(config.hapticDuration) / 1000.0) // Use config duration or minimum 1 second
-            let numberOfPulses = max(1, Int(totalDuration / pulseInterval)) // Ensure at least 1 pulse
-
-            for i in 0..<numberOfPulses {
-                let startTime = Double(i) * pulseInterval
-
-                let intensity = CHHapticEventParameter(parameterID: .hapticIntensity, value: config.hapticIntensity)
-                let sharpness = CHHapticEventParameter(parameterID: .hapticSharpness, value: config.hapticSharpness)
-
-                let pulseEvent = CHHapticEvent(
-                    eventType: .hapticTransient,
-                    parameters: [intensity, sharpness],
-                    relativeTime: startTime
-                )
-
-                events.append(pulseEvent)
-            }
-
-            let pattern = try CHHapticPattern(events: events, parameters: [])
-            continuousPlayer = try hapticEngine.makeAdvancedPlayer(with: pattern)
-
-            try continuousPlayer?.start(atTime: CHHapticTimeImmediate)
             isHapticPlaying = true
+
+            // Start the continuous haptic loop
+            playHapticPulse()
 
         } catch {
             print("Failed to start continuous haptic: \(error)")
-            // Try to recover by resetting the engine
             resetHapticEngine()
+        }
+    }
+
+    private func playHapticPulse() {
+        guard isHapticPlaying, let config = config else { return }
+
+        // Calculate frequency based on rotation speed
+        // Map rotation speed (30-300+) to frequency multiplier (0.5x - 2.5x)
+        // Use a slower scaling curve for more gradual changes
+        let normalizedSpeed = (currentRotationSpeed - 30.0) / 270.0 // 0.0 at base speed, 1.0 at high speed
+        let speedFactor = 0.5 + (min(max(normalizedSpeed, 0.0), 1.0) * 2.0) // 0.5x to 2.5x
+        let dynamicFrequency = Float(config.hapticFrequency) * Float(speedFactor)
+        let pulseInterval = 1.0 / Double(dynamicFrequency)
+
+        do {
+            // Create a single pulse
+            let intensity = CHHapticEventParameter(parameterID: .hapticIntensity, value: config.hapticIntensity)
+            let sharpness = CHHapticEventParameter(parameterID: .hapticSharpness, value: config.hapticSharpness)
+
+            let event = CHHapticEvent(
+                eventType: .hapticTransient,
+                parameters: [intensity, sharpness],
+                relativeTime: 0
+            )
+
+            let pattern = try CHHapticPattern(events: [event], parameters: [])
+            let player = try hapticEngine?.makePlayer(with: pattern)
+            try player?.start(atTime: CHHapticTimeImmediate)
+
+            // Schedule next pulse
+            DispatchQueue.main.asyncAfter(deadline: .now() + pulseInterval) { [weak self] in
+                self?.playHapticPulse()
+            }
+
+        } catch {
+            print("Failed to play haptic pulse: \(error)")
         }
     }
 
 
     private func stopContinuousHaptic() {
-        guard isHapticPlaying else { return }
-
-        do {
-            try continuousPlayer?.stop(atTime: CHHapticTimeImmediate)
-        } catch {
-            print("Failed to stop continuous haptic gracefully: \(error)")
-        }
-
-        continuousPlayer = nil
         isHapticPlaying = false
+        continuousPlayer = nil
     }
 
     private func forceStopAllHaptics() {
-        // Force stop any playing haptics
-        if let player = continuousPlayer {
-            do {
-                try player.stop(atTime: CHHapticTimeImmediate)
-            } catch {
-                // Ignore errors during force stop
-            }
-        }
-
-        continuousPlayer = nil
         isHapticPlaying = false
+        continuousPlayer = nil
     }
 
     private func resetHapticEngine() {
