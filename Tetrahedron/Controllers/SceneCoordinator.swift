@@ -67,7 +67,7 @@ class SceneCoordinator: NSObject {
 
 
     private func startContinuousHaptic() {
-        guard let config = config else { return }
+        guard config != nil else { return }
         guard !isHapticPlaying else { return }
 
         // Restart engine if needed
