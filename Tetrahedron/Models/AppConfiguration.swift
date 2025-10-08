@@ -5,13 +5,13 @@ class AppConfiguration: ObservableObject {
     @Published var selectedShape: ShapeType = .tetrahedron
     @Published var selectedColor: NeonColor = .cyan
     @Published var isMusicEnabled: Bool = false
+    @Published var isHapticsEnabled: Bool = true
     @Published var showConfigSheet: Bool = false
 
-    // Core Haptic parameters for tuning
-    @Published var hapticIntensity: Float = 0.7 // Base intensity (0.0-1.0)
-    @Published var hapticDuration: Float = 300.0 // Duration in milliseconds after touch ends
-    @Published var hapticFrequency: Float = 20.0 // Frequency in Hz
-    @Published var hapticSharpness: Float = 0.2 // Sharpness/texture (0.0-1.0)
+    // Internal haptic parameters (not exposed to UI)
+    let hapticIntensity: Float = 0.7
+    let hapticFrequency: Float = 20.0
+    let hapticSharpness: Float = 0.2
 }
 
 enum NeonColor: String, CaseIterable, Identifiable {

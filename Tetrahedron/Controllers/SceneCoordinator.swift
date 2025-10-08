@@ -160,6 +160,14 @@ class SceneCoordinator: NSObject {
     // MARK: - Velocity-Based Haptic Methods
 
     private func updateHapticForVelocity(_ velocity: CGFloat) {
+        guard let config = config, config.isHapticsEnabled else {
+            // If haptics are disabled, stop any playing haptics
+            if isHapticPlaying {
+                stopContinuousHaptic()
+            }
+            return
+        }
+
         // Calculate velocity without base rotation to determine if user has added significant movement
         let userAddedSpeed = sqrt(pow(addedVelocity.dx, 2) + pow(addedVelocity.dy, 2))
         let significantVelocity = velocity > 30.0

@@ -148,11 +148,8 @@ struct ConfigurationBottomSheet: View {
                         .padding(.horizontal, 28)
                     }
                     
-                    // Haptic Controls Section
-                    hapticControlsSection
-
-                    // Share Section
-                    shareSection
+                    // Haptics Section
+                    hapticsSection
                 }
                 .padding(.bottom, 50)
             }
@@ -204,7 +201,7 @@ struct ConfigurationBottomSheet: View {
         .clipShape(RoundedRectangle(cornerRadius: 20))
     }
 
-    private var hapticControlsSection: some View {
+    private var hapticsSection: some View {
         VStack(spacing: 20) {
             HStack {
                 ZStack {
@@ -215,7 +212,7 @@ struct ConfigurationBottomSheet: View {
                         .foregroundStyle(config.selectedColor.color)
                         .font(.system(size: 16, weight: .semibold))
                 }
-                Text("HAPTIC TUNING")
+                Text("HAPTICS")
                     .font(.system(size: 13, weight: .bold, design: .monospaced))
                     .foregroundStyle(.white.opacity(0.9))
                     .tracking(1.2)
@@ -223,129 +220,24 @@ struct ConfigurationBottomSheet: View {
             }
             .padding(.horizontal, 28)
 
-            VStack(spacing: 16) {
-                // Intensity Control
-                HapticSlider(
-                    title: "INTENSITY",
-                    value: $config.hapticIntensity,
-                    range: 0.1...1.0,
-                    accentColor: config.selectedColor.color
-                )
-
-                // Duration Control (in milliseconds)
-                HapticSlider(
-                    title: "DURATION_MS",
-                    value: $config.hapticDuration,
-                    range: 100.0...2000.0,
-                    accentColor: config.selectedColor.color
-                )
-
-                // Frequency Control
-                HapticSlider(
-                    title: "FREQUENCY",
-                    value: $config.hapticFrequency,
-                    range: 5.0...100.0,
-                    accentColor: config.selectedColor.color
-                )
-
-                // Sharpness Control
-                HapticSlider(
-                    title: "SHARPNESS",
-                    value: $config.hapticSharpness,
-                    range: 0.0...1.0,
-                    accentColor: config.selectedColor.color
-                )
-            }
-            .padding(.horizontal, 28)
-        }
-    }
-
-    private var shareSection: some View {
-        VStack(spacing: 20) {
             HStack {
-                ZStack {
-                    Circle()
-                        .fill(config.selectedColor.color.opacity(0.15))
-                        .frame(width: 32, height: 32)
-                    Image(systemName: "square.and.arrow.up")
-                        .foregroundStyle(config.selectedColor.color)
-                        .font(.system(size: 16, weight: .semibold))
-                }
-                Text("SHARE")
-                    .font(.system(size: 13, weight: .bold, design: .monospaced))
-                    .foregroundStyle(.white.opacity(0.9))
-                    .tracking(1.2)
-                Spacer()
-            }
-            .padding(.horizontal, 28)
-            
-            shareButton
-                .padding(.horizontal, 28)
-        }
-    }
-    
-    private var shareButton: some View {
-        Button(action: shareApp) {
-            HStack(spacing: 12) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("SHARE APP")
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("TACTILE_FEEDBACK")
                         .font(.system(size: 15, weight: .medium, design: .monospaced))
                         .foregroundStyle(.white.opacity(0.95))
-                    Text("Tell friends about Tetrahedron")
+                    Text("// rotation.sync")
                         .font(.system(size: 12, weight: .regular, design: .monospaced))
                         .foregroundStyle(.white.opacity(0.5))
                 }
-                
+
                 Spacer()
-                
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundStyle(config.selectedColor.color.opacity(0.7))
+
+                FuturisticToggle(
+                    isOn: $config.isHapticsEnabled,
+                    accentColor: config.selectedColor.color
+                )
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 16)
-            .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.black.opacity(0.4))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(config.selectedColor.color.opacity(0.3), lineWidth: 1)
-                    )
-            )
-        }
-    }
-    
-    private func shareApp() {
-        // Haptic feedback
-        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-        impactFeedback.impactOccurred()
-        
-        // First dismiss the current sheet
-        config.showConfigSheet = false
-        
-        // Add a small delay to let the sheet dismiss, then show share sheet
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            let appStoreURL = "https://apps.apple.com/app/tetrahedron2/id123456789"
-            let shareText = "Check out Tetrahedron2! 🔺✨"
-            
-            let activityVC = UIActivityViewController(
-                activityItems: [shareText, URL(string: appStoreURL)!],
-                applicationActivities: nil
-            )
-            
-            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-               let window = windowScene.windows.first,
-               let rootViewController = window.rootViewController {
-                
-                // For iPad, set up popover
-                if let popover = activityVC.popoverPresentationController {
-                    popover.sourceView = window
-                    popover.sourceRect = CGRect(x: window.bounds.midX, y: window.bounds.midY, width: 0, height: 0)
-                    popover.permittedArrowDirections = []
-                }
-                
-                rootViewController.present(activityVC, animated: true)
-            }
+            .padding(.horizontal, 28)
         }
     }
 }
@@ -536,54 +428,6 @@ struct FuturisticToggle: View {
             impactFeedback.impactOccurred()
             isOn.toggle()
         }
-    }
-}
-
-struct HapticSlider: View {
-    let title: String
-    @Binding var value: Float
-    let range: ClosedRange<Float>
-    let accentColor: Color
-
-    var body: some View {
-        VStack(spacing: 8) {
-            HStack {
-                Text(title)
-                    .font(.system(size: 11, weight: .medium, design: .monospaced))
-                    .foregroundStyle(.white.opacity(0.8))
-                    .tracking(0.5)
-
-                Spacer()
-
-                Text(String(format: "%.2f", value))
-                    .font(.system(size: 11, weight: .bold, design: .monospaced))
-                    .foregroundStyle(accentColor)
-                    .frame(width: 45, alignment: .trailing)
-            }
-
-            HStack {
-                Slider(value: Binding(
-                    get: { value },
-                    set: { newValue in
-                        value = newValue
-                        // Provide immediate haptic feedback when adjusting
-                        let impactFeedback = UIImpactFeedbackGenerator(style: .light)
-                        impactFeedback.impactOccurred()
-                    }
-                ), in: range)
-                .accentColor(accentColor)
-            }
-        }
-        .padding(.horizontal, 4)
-        .padding(.vertical, 8)
-        .background(
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color.black.opacity(0.3))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(accentColor.opacity(0.2), lineWidth: 1)
-                )
-        )
     }
 }
 
