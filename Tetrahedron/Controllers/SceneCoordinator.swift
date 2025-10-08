@@ -170,19 +170,20 @@ class SceneCoordinator: NSObject {
 
         // Calculate velocity without base rotation to determine if user has added significant movement
         let userAddedSpeed = sqrt(pow(addedVelocity.dx, 2) + pow(addedVelocity.dy, 2))
-        let significantVelocity = velocity > 30.0
+        let baseRotationSpeed = sqrt(pow(30.0, 2) + pow(20.0, 2)) // ≈ 36
+        let significantlyAboveBase = velocity > (baseRotationSpeed + 5.0) // ~41, buffer above base rotation
 
-        // Only start haptics if user has interacted AND there's significant total velocity
-        if significantVelocity && !isHapticPlaying && hasUserInteracted {
+        // Only start haptics if user has interacted AND velocity is significantly above base rotation
+        if significantlyAboveBase && !isHapticPlaying && hasUserInteracted {
             startContinuousHaptic()
         }
-        // Continue haptics based on total velocity (including momentum decay)
-        else if !significantVelocity && isHapticPlaying {
+        // Stop haptics when velocity returns close to base rotation speed
+        else if !significantlyAboveBase && isHapticPlaying {
             stopContinuousHaptic()
         }
 
-        // Reset interaction flag when all velocity stops
-        if velocity < 5.0 && userAddedSpeed < 1.0 {
+        // Reset interaction flag when velocity returns to near base rotation and user input stops
+        if velocity <= (baseRotationSpeed + 2.0) && userAddedSpeed < 5.0 {
             hasUserInteracted = false
         }
     }

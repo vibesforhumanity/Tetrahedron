@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		060149F12E5C07780075E3A1 /* ES_Dunes - Valante.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 060149F02E5C07780075E3A1 /* ES_Dunes - Valante.mp3 */; };
+		06EBBA8C2E96F247006A1E71 /* meditation-music-409195.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 06EBBA8B2E96F247006A1E71 /* meditation-music-409195.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,7 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		060149F02E5C07780075E3A1 /* ES_Dunes - Valante.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "ES_Dunes - Valante.mp3"; sourceTree = "<group>"; };
+		06EBBA8B2E96F247006A1E71 /* meditation-music-409195.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "meditation-music-409195.mp3"; sourceTree = "<group>"; };
 		81429E222E517B4F0010EE82 /* Tetrahedron.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tetrahedron.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		81429E2F2E517B500010EE82 /* TetrahedronTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TetrahedronTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		81429E392E517B500010EE82 /* TetrahedronUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TetrahedronUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -80,7 +80,7 @@
 		81429E192E517B4F0010EE82 = {
 			isa = PBXGroup;
 			children = (
-				060149F02E5C07780075E3A1 /* ES_Dunes - Valante.mp3 */,
+				06EBBA8B2E96F247006A1E71 /* meditation-music-409195.mp3 */,
 				81429E242E517B4F0010EE82 /* Tetrahedron */,
 				81429E322E517B500010EE82 /* TetrahedronTests */,
 				81429E3C2E517B500010EE82 /* TetrahedronUITests */,
@@ -218,7 +218,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				060149F12E5C07780075E3A1 /* ES_Dunes - Valante.mp3 in Resources */,
+				06EBBA8C2E96F247006A1E71 /* meditation-music-409195.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

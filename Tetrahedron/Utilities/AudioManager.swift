@@ -31,8 +31,8 @@ class AudioManager: ObservableObject {
     
     private func setupAudioPlayer() {
         // Look for the audio file in the app bundle
-        guard let url = Bundle.main.url(forResource: "ES_Dunes - Valante", withExtension: "mp3") else {
-            print("Could not find 'ES_Dunes - Valante.mp3' in app bundle")
+        guard let url = Bundle.main.url(forResource: "meditation-music-409195", withExtension: "mp3") else {
+            print("Could not find 'meditation-music-409195.mp3' in app bundle")
             print("Available bundle resources:")
             if let bundlePath = Bundle.main.resourcePath {
                 let resourceContents = try? FileManager.default.contentsOfDirectory(atPath: bundlePath)
