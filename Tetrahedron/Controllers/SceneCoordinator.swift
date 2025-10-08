@@ -18,6 +18,7 @@ class SceneCoordinator: NSObject {
     private var continuousPlayer: CHHapticAdvancedPatternPlayer?
     private var isHapticPlaying = false
     private var isUserTouching = false
+    private var hasUserInteracted = false
     private var currentRotationSpeed: CGFloat = 0.0
     
     init(config: AppConfiguration) {
@@ -163,18 +164,23 @@ class SceneCoordinator: NSObject {
     // MARK: - Velocity-Based Haptic Methods
 
     private func updateHapticForVelocity(_ velocity: CGFloat) {
-        // Only start haptics if there's significant velocity AND user is actively spinning
+        // Calculate velocity without base rotation to determine if user has added significant movement
+        let userAddedSpeed = sqrt(pow(addedVelocity.dx, 2) + pow(addedVelocity.dy, 2))
         let significantVelocity = velocity > 30.0
 
-        if significantVelocity && !isHapticPlaying {
-            // Start continuous haptics with base frequency - no restarts
+        // Only start haptics if user has interacted AND there's significant total velocity
+        if significantVelocity && !isHapticPlaying && hasUserInteracted {
             startContinuousHaptic()
-        } else if !significantVelocity && isHapticPlaying {
-            // Stop haptics when velocity drops too low
+        }
+        // Continue haptics based on total velocity (including momentum decay)
+        else if !significantVelocity && isHapticPlaying {
             stopContinuousHaptic()
         }
 
-        // No frequency updates or restarts - keep it simple and continuous
+        // Reset interaction flag when all velocity stops
+        if velocity < 5.0 && userAddedSpeed < 1.0 {
+            hasUserInteracted = false
+        }
     }
 
     // Simplified - no complex frequency updates or restarts needed
@@ -196,12 +202,10 @@ class SceneCoordinator: NSObject {
         
         let speed = sqrt(pow(totalVelocityX, 2) + pow(totalVelocityY, 2))
 
-        // For haptics, only use the user-added velocity, not base rotation
-        let userAddedSpeed = sqrt(pow(addedVelocity.dx, 2) + pow(addedVelocity.dy, 2))
-
-        // Update haptic feedback based on USER velocity only
-        currentRotationSpeed = speed  // Keep this for star field effects
-        updateHapticForVelocity(userAddedSpeed)  // Use user speed for haptics
+        // Update haptic feedback based on total rotation velocity (for physics decay)
+        // But only allow haptics to start if user is actively touching
+        currentRotationSpeed = speed
+        updateHapticForVelocity(speed)
 
         addedVelocity.dx *= 0.985
         addedVelocity.dy *= 0.985
@@ -224,14 +228,16 @@ class SceneCoordinator: NSObject {
             lastPanLocation = location
             currentVelocity = .zero
             isUserTouching = true
-            // Don't start haptics until user actually moves
+            // Mark that user has started interacting
             
         case .changed:
             let deltaX = location.x - lastPanLocation.x
             let deltaY = location.y - lastPanLocation.y
-            
+
+            // User is actively moving - mark interaction
+            hasUserInteracted = true
             currentVelocity = CGVector(dx: velocity.x, dy: velocity.y)
-            
+
             addedVelocity.dx += deltaX * 3
             addedVelocity.dy += deltaY * 3
             
