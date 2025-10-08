@@ -148,7 +148,10 @@ struct ConfigurationBottomSheet: View {
                         .padding(.horizontal, 28)
                     }
                     
-                    // Share Section  
+                    // Haptic Controls Section
+                    hapticControlsSection
+
+                    // Share Section
                     shareSection
                 }
                 .padding(.bottom, 50)
@@ -200,7 +203,63 @@ struct ConfigurationBottomSheet: View {
         )
         .clipShape(RoundedRectangle(cornerRadius: 20))
     }
-    
+
+    private var hapticControlsSection: some View {
+        VStack(spacing: 20) {
+            HStack {
+                ZStack {
+                    Circle()
+                        .fill(config.selectedColor.color.opacity(0.15))
+                        .frame(width: 32, height: 32)
+                    Image(systemName: "iphone.radiowaves.left.and.right")
+                        .foregroundStyle(config.selectedColor.color)
+                        .font(.system(size: 16, weight: .semibold))
+                }
+                Text("HAPTIC TUNING")
+                    .font(.system(size: 13, weight: .bold, design: .monospaced))
+                    .foregroundStyle(.white.opacity(0.9))
+                    .tracking(1.2)
+                Spacer()
+            }
+            .padding(.horizontal, 28)
+
+            VStack(spacing: 16) {
+                // Intensity Control
+                HapticSlider(
+                    title: "INTENSITY",
+                    value: $config.hapticIntensity,
+                    range: 0.1...1.0,
+                    accentColor: config.selectedColor.color
+                )
+
+                // Duration Control (in milliseconds)
+                HapticSlider(
+                    title: "DURATION_MS",
+                    value: $config.hapticDuration,
+                    range: 100.0...2000.0,
+                    accentColor: config.selectedColor.color
+                )
+
+                // Frequency Control
+                HapticSlider(
+                    title: "FREQUENCY",
+                    value: $config.hapticFrequency,
+                    range: 5.0...100.0,
+                    accentColor: config.selectedColor.color
+                )
+
+                // Sharpness Control
+                HapticSlider(
+                    title: "SHARPNESS",
+                    value: $config.hapticSharpness,
+                    range: 0.0...1.0,
+                    accentColor: config.selectedColor.color
+                )
+            }
+            .padding(.horizontal, 28)
+        }
+    }
+
     private var shareSection: some View {
         VStack(spacing: 20) {
             HStack {
@@ -477,6 +536,54 @@ struct FuturisticToggle: View {
             impactFeedback.impactOccurred()
             isOn.toggle()
         }
+    }
+}
+
+struct HapticSlider: View {
+    let title: String
+    @Binding var value: Float
+    let range: ClosedRange<Float>
+    let accentColor: Color
+
+    var body: some View {
+        VStack(spacing: 8) {
+            HStack {
+                Text(title)
+                    .font(.system(size: 11, weight: .medium, design: .monospaced))
+                    .foregroundStyle(.white.opacity(0.8))
+                    .tracking(0.5)
+
+                Spacer()
+
+                Text(String(format: "%.2f", value))
+                    .font(.system(size: 11, weight: .bold, design: .monospaced))
+                    .foregroundStyle(accentColor)
+                    .frame(width: 45, alignment: .trailing)
+            }
+
+            HStack {
+                Slider(value: Binding(
+                    get: { value },
+                    set: { newValue in
+                        value = newValue
+                        // Provide immediate haptic feedback when adjusting
+                        let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+                        impactFeedback.impactOccurred()
+                    }
+                ), in: range)
+                .accentColor(accentColor)
+            }
+        }
+        .padding(.horizontal, 4)
+        .padding(.vertical, 8)
+        .background(
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color.black.opacity(0.3))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(accentColor.opacity(0.2), lineWidth: 1)
+                )
+        )
     }
 }
 

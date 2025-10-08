@@ -6,7 +6,7 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            ShapeSceneView(selectedShape: $config.selectedShape, selectedColor: config.selectedColor)
+            ShapeSceneView(selectedShape: $config.selectedShape, selectedColor: config.selectedColor, config: config)
                 .ignoresSafeArea()
                 .onTapGesture {
                     if config.showConfigSheet {

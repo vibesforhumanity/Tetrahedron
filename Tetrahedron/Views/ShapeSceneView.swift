@@ -4,6 +4,7 @@ import SceneKit
 struct ShapeSceneView: UIViewRepresentable {
     @Binding var selectedShape: ShapeType
     let selectedColor: NeonColor
+    let config: AppConfiguration
     
     func makeUIView(context: Context) -> SCNView {
         let scnView = SCNView()
@@ -39,6 +40,7 @@ struct ShapeSceneView: UIViewRepresentable {
         
         context.coordinator.scnView = scnView
         context.coordinator.shapeContainer = shapeContainer
+        context.coordinator.config = config
         
         return scnView
     }
@@ -65,7 +67,7 @@ struct ShapeSceneView: UIViewRepresentable {
     }
     
     func makeCoordinator() -> SceneCoordinator {
-        SceneCoordinator()
+        SceneCoordinator(config: config)
     }
     
     private func addShape(_ type: ShapeType, color: NeonColor, to container: SCNNode) {
